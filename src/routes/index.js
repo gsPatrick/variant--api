@@ -2,6 +2,7 @@ const { Router } = require('express');
 
 const authRoutes = require('../features/auth/auth.routes');
 const onboardingRoutes = require('../features/onboarding/onboarding.routes');
+const usersRoutes = require('../features/users/users.routes');
 const farmsRoutes = require('../features/farms/farms.routes');
 const plotsRoutes = require('../features/plots/plots.routes');
 const seasonsRoutes = require('../features/seasons/seasons.routes');
@@ -17,6 +18,7 @@ router.get('/ping', (req, res) => {
 
 router.use('/auth', authRoutes);
 router.use('/onboarding', onboardingRoutes);
+router.use('/users', usersRoutes);
 // CRUD de dominio + modulos SOLOS (sob /plots/:plotId/soil-analyses) e SAFRAS.
 router.use('/farms', farmsRoutes);
 router.use('/plots', plotsRoutes);
