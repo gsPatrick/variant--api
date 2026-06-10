@@ -4,7 +4,6 @@ const AppError = require('../../utils/app-error');
 const v = require('../../utils/validation');
 const {
   USER_ROLES,
-  CROP_VALUES,
   SEASON_EVENT_TYPES,
   SEASON_EVENT_TYPE_VALUES,
 } = require('../../config/constants');
@@ -202,8 +201,9 @@ function toPublicSeason(season) {
 function validateSeason(payload, { partial }) {
   const errors = [];
   if (!partial || v.isPresent(payload.crop)) {
-    if (!v.isNonEmptyString(payload.crop) || !CROP_VALUES.includes(payload.crop)) {
-      errors.push({ field: 'crop', message: `crop deve ser um de: ${CROP_VALUES.join(', ')}.` });
+    // Cultura livre (soja, milho, algodão, etc.) — exige apenas texto não vazio.
+    if (!v.isNonEmptyString(payload.crop)) {
+      errors.push({ field: 'crop', message: 'crop (cultura) e obrigatorio.' });
     }
   }
   if (!partial || v.isPresent(payload.variety)) {
@@ -244,7 +244,7 @@ async function createSeason(payload) {
 
   const season = await Season.create({
     plotId: payload.plotId,
-    crop: payload.crop,
+    crop: payload.crop.trim(),
     variety: payload.variety.trim(),
     seasonLabel: v.isNonEmptyString(payload.seasonLabel) ? payload.seasonLabel.trim() : null,
     year: payload.year,
@@ -302,7 +302,7 @@ async function updateSeason(season, payload) {
     await assertPlotExists(payload.plotId);
     season.plotId = payload.plotId;
   }
-  if (v.isPresent(payload.crop)) season.crop = payload.crop;
+  if (v.isPresent(payload.crop)) season.crop = payload.crop.trim();
   if (v.isPresent(payload.variety)) season.variety = payload.variety.trim();
   if (v.isPresent(payload.seasonLabel)) {
     season.seasonLabel = v.isNonEmptyString(payload.seasonLabel) ? payload.seasonLabel.trim() : null;
