@@ -11,6 +11,8 @@ function toPublicFarm(farm) {
     city: farm.city,
     state: farm.state,
     totalAreaHa: farm.totalAreaHa,
+    centroidLat: farm.centroidLat,
+    centroidLng: farm.centroidLng,
     createdAt: farm.createdAt,
     updatedAt: farm.updatedAt,
   };
@@ -31,6 +33,12 @@ function validateFarm(payload, { partial }) {
   }
   if (v.isPresent(payload.totalAreaHa) && !v.isFiniteNumber(payload.totalAreaHa)) {
     errors.push({ field: 'totalAreaHa', message: 'totalAreaHa deve ser numerico.' });
+  }
+  if (v.isPresent(payload.centroidLat) && !v.isFiniteNumber(payload.centroidLat)) {
+    errors.push({ field: 'centroidLat', message: 'centroidLat deve ser numerico.' });
+  }
+  if (v.isPresent(payload.centroidLng) && !v.isFiniteNumber(payload.centroidLng)) {
+    errors.push({ field: 'centroidLng', message: 'centroidLng deve ser numerico.' });
   }
 
   return errors;
@@ -63,6 +71,8 @@ async function createFarm(payload) {
     city: v.isNonEmptyString(payload.city) ? payload.city.trim() : null,
     state: v.isNonEmptyString(payload.state) ? payload.state.trim().toUpperCase() : null,
     totalAreaHa: v.isFiniteNumber(payload.totalAreaHa) ? payload.totalAreaHa : null,
+    centroidLat: v.isFiniteNumber(payload.centroidLat) ? payload.centroidLat : null,
+    centroidLng: v.isFiniteNumber(payload.centroidLng) ? payload.centroidLng : null,
   });
   return toPublicFarm(farm);
 }
@@ -100,6 +110,8 @@ async function updateFarm(farm, payload) {
   if (v.isPresent(payload.city)) farm.city = v.isNonEmptyString(payload.city) ? payload.city.trim() : null;
   if (v.isPresent(payload.state)) farm.state = v.isNonEmptyString(payload.state) ? payload.state.trim().toUpperCase() : null;
   if (v.isPresent(payload.totalAreaHa)) farm.totalAreaHa = v.isFiniteNumber(payload.totalAreaHa) ? payload.totalAreaHa : null;
+  if (v.isPresent(payload.centroidLat)) farm.centroidLat = v.isFiniteNumber(payload.centroidLat) ? payload.centroidLat : null;
+  if (v.isPresent(payload.centroidLng)) farm.centroidLng = v.isFiniteNumber(payload.centroidLng) ? payload.centroidLng : null;
 
   await farm.save();
   return toPublicFarm(farm);

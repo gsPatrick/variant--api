@@ -20,6 +20,8 @@ function toPublic(user) {
       city: f.city,
       state: f.state,
       totalAreaHa: f.totalAreaHa,
+      centroidLat: f.centroidLat,
+      centroidLng: f.centroidLng,
       plots: (f.plots || []).map((p) => ({
         id: p.id,
         name: p.name,

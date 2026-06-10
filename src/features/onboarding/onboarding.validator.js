@@ -66,12 +66,20 @@ function validateProjeto(projeto, errors) {
   if (v.isPresent(projeto.totalAreaHa) && !v.isFiniteNumber(projeto.totalAreaHa)) {
     errors.push({ field: 'projeto.totalAreaHa', message: 'totalAreaHa deve ser numerico.' });
   }
+  if (v.isPresent(projeto.centroidLat) && !v.isFiniteNumber(projeto.centroidLat)) {
+    errors.push({ field: 'projeto.centroidLat', message: 'centroidLat deve ser numerico.' });
+  }
+  if (v.isPresent(projeto.centroidLng) && !v.isFiniteNumber(projeto.centroidLng)) {
+    errors.push({ field: 'projeto.centroidLng', message: 'centroidLng deve ser numerico.' });
+  }
 
   return {
     name: v.isNonEmptyString(projeto.name) ? projeto.name.trim() : undefined,
     city: v.isNonEmptyString(projeto.city) ? projeto.city.trim() : null,
     state: v.isNonEmptyString(projeto.state) ? projeto.state.trim().toUpperCase() : null,
     totalAreaHa: v.isFiniteNumber(projeto.totalAreaHa) ? projeto.totalAreaHa : null,
+    centroidLat: v.isFiniteNumber(projeto.centroidLat) ? projeto.centroidLat : null,
+    centroidLng: v.isFiniteNumber(projeto.centroidLng) ? projeto.centroidLng : null,
   };
 }
 

@@ -34,6 +34,18 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: true,
         field: 'total_area_ha',
       },
+      // Centroide (lat/lng) da fazenda — geocodificado de cidade/UF no cadastro.
+      // Centraliza o mapa na regiao antes do contorno do talhao existir.
+      centroidLat: {
+        type: DataTypes.DECIMAL(10, 7),
+        allowNull: true,
+        field: 'centroid_lat',
+      },
+      centroidLng: {
+        type: DataTypes.DECIMAL(10, 7),
+        allowNull: true,
+        field: 'centroid_lng',
+      },
     },
     {
       tableName: 'farms',

@@ -131,6 +131,8 @@ async function execute(payload) {
         city: plan.projeto.city,
         state: plan.projeto.state,
         totalAreaHa: plan.projeto.totalAreaHa,
+        centroidLat: plan.projeto.centroidLat,
+        centroidLng: plan.projeto.centroidLng,
       },
       { transaction }
     );
