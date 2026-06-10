@@ -6,6 +6,7 @@ const { memoryUpload } = require('../../middlewares/upload');
 const { USER_ROLES } = require('../../config/constants');
 const controller = require('./plots.controller');
 const soilsRoutes = require('../soils/soils.routes');
+const resistanceRoutes = require('../resistance/resistance.routes');
 
 const router = Router();
 
@@ -33,5 +34,8 @@ router.get('/:plotId/map', resolvePlotAccess, controller.mapData);
 
 // ----- SOLOS: sub-rotas escopadas ao talhao -----
 router.use('/:plotId/soil-analyses', soilsRoutes);
+
+// ----- Resistencia do solo (compactacao) escopada ao talhao -----
+router.use('/:plotId/resistance', resistanceRoutes);
 
 module.exports = router;

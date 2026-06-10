@@ -7,6 +7,7 @@ const User = require('./User')(sequelize, DataTypes);
 const Farm = require('./Farm')(sequelize, DataTypes);
 const Plot = require('./Plot')(sequelize, DataTypes);
 const SoilAnalysis = require('./SoilAnalysis')(sequelize, DataTypes);
+const SoilResistance = require('./SoilResistance')(sequelize, DataTypes);
 const Season = require('./Season')(sequelize, DataTypes);
 const SeasonEvent = require('./SeasonEvent')(sequelize, DataTypes);
 const EventPhoto = require('./EventPhoto')(sequelize, DataTypes);
@@ -50,6 +51,20 @@ Plot.hasMany(SoilAnalysis, {
   onUpdate: 'CASCADE',
 });
 SoilAnalysis.belongsTo(Plot, {
+  as: 'plot',
+  foreignKey: { name: 'plotId', field: 'plot_id', allowNull: false },
+  onDelete: 'CASCADE',
+  onUpdate: 'CASCADE',
+});
+
+// Talhao 1 --- N Leituras de resistencia do solo (compactacao)
+Plot.hasMany(SoilResistance, {
+  as: 'soilResistance',
+  foreignKey: { name: 'plotId', field: 'plot_id', allowNull: false },
+  onDelete: 'CASCADE',
+  onUpdate: 'CASCADE',
+});
+SoilResistance.belongsTo(Plot, {
   as: 'plot',
   foreignKey: { name: 'plotId', field: 'plot_id', allowNull: false },
   onDelete: 'CASCADE',
@@ -120,6 +135,7 @@ const db = {
   Farm,
   Plot,
   SoilAnalysis,
+  SoilResistance,
   Season,
   SeasonEvent,
   EventPhoto,
