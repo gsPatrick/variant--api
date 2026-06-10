@@ -115,6 +115,72 @@ async function createEvent(season, payload, file) {
   });
 }
 
+// Carrega um evento garantindo que pertence à safra (tenant já validado).
+async function findOwnedEvent(season, eventId) {
+  const event = await SeasonEvent.findByPk(eventId, { include: [{ model: EventPhoto, as: 'photos' }] });
+  if (!event || event.seasonId !== season.id) {
+    throw new AppError('Evento nao encontrado.', 404, 'EVENT_NOT_FOUND');
+  }
+  return event;
+}
+
+// UPDATE de evento (admin): campos de texto + foto opcional (anexa nova).
+async function updateEvent(season, eventId, payload, file) {
+  const event = await findOwnedEvent(season, eventId);
+
+  const errors = [];
+  if (v.isPresent(payload.title) && !v.isNonEmptyString(payload.title)) {
+    errors.push({ field: 'title', message: 'titulo invalido.' });
+  }
+  if (
+    v.isPresent(payload.eventDate) &&
+    (!v.isNonEmptyString(payload.eventDate) || Number.isNaN(Date.parse(payload.eventDate)))
+  ) {
+    errors.push({ field: 'eventDate', message: 'eventDate (YYYY-MM-DD) invalido.' });
+  }
+  let eventType;
+  if (v.isPresent(payload.eventType)) {
+    eventType = String(payload.eventType).trim();
+    if (!SEASON_EVENT_TYPE_VALUES.includes(eventType)) {
+      errors.push({ field: 'eventType', message: `eventType invalido. Use: ${SEASON_EVENT_TYPE_VALUES.join(', ')}.` });
+    }
+  }
+  if (errors.length > 0) throw v.validationError(errors);
+
+  return sequelize.transaction(async (transaction) => {
+    if (v.isPresent(payload.title)) event.title = payload.title.trim();
+    if (eventType) event.eventType = eventType;
+    if (v.isPresent(payload.eventDate)) event.eventDate = payload.eventDate;
+    if (v.isPresent(payload.description)) {
+      event.description = v.isNonEmptyString(payload.description) ? payload.description.trim() : null;
+    }
+    await event.save({ transaction });
+
+    if (file) {
+      await EventPhoto.create(
+        {
+          eventId: event.id,
+          url: buildPhotoUrl(file.filename),
+          caption: null,
+          fileName: file.originalname,
+          fileSize: file.size,
+          mimeType: file.mimetype,
+        },
+        { transaction }
+      );
+    }
+
+    const photos = await EventPhoto.findAll({ where: { eventId: event.id }, transaction });
+    return formatEvent(event, photos);
+  });
+}
+
+// DELETE de evento (admin). O cascade remove as fotos associadas.
+async function removeEvent(season, eventId) {
+  const event = await findOwnedEvent(season, eventId);
+  await event.destroy();
+}
+
 // ----- CRUD de safras (controle total do admin; produtor: leitura isolada) -----
 
 function toPublicSeason(season) {
@@ -259,6 +325,8 @@ async function removeSeason(season) {
 module.exports = {
   listEvents,
   createEvent,
+  updateEvent,
+  removeEvent,
   createSeason,
   listSeasons,
   getSeason,

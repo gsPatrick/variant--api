@@ -43,4 +43,16 @@ const createEvent = catchAsync(async (req, res) => {
   return sendSuccess(res, { statusCode: 201, data: result, message: 'Evento cadastrado.' });
 });
 
-module.exports = { create, list, getOne, update, remove, listEvents, createEvent };
+// PUT /seasons/:seasonId/events/:eventId (admin)
+const updateEvent = catchAsync(async (req, res) => {
+  const result = await seasonsService.updateEvent(req.season, req.params.eventId, req.body || {}, req.file || null);
+  return sendSuccess(res, { data: result, message: 'Evento atualizado.' });
+});
+
+// DELETE /seasons/:seasonId/events/:eventId (admin)
+const removeEvent = catchAsync(async (req, res) => {
+  await seasonsService.removeEvent(req.season, req.params.eventId);
+  return sendSuccess(res, { message: 'Evento removido.' });
+});
+
+module.exports = { create, list, getOne, update, remove, listEvents, createEvent, updateEvent, removeEvent };

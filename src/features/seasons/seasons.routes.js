@@ -28,5 +28,20 @@ router.post(
   imageUpload('foto', 'event-photos'),
   controller.createEvent
 );
+// Editar evento (texto + foto opcional) — apenas administrador.
+router.put(
+  '/:seasonId/events/:eventId',
+  authorize(USER_ROLES.ADMIN),
+  resolveSeasonAccess,
+  imageUpload('foto', 'event-photos'),
+  controller.updateEvent
+);
+// Remover evento — apenas administrador.
+router.delete(
+  '/:seasonId/events/:eventId',
+  authorize(USER_ROLES.ADMIN),
+  resolveSeasonAccess,
+  controller.removeEvent
+);
 
 module.exports = router;
