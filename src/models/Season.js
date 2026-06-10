@@ -1,5 +1,3 @@
-const { CROP_VALUES } = require('../config/constants');
-
 // Safra de um talhao (modulo SAFRAS): cultura + variedade plantada em um ciclo.
 // Alimenta o marcador no mapa (cultura/variedade) e agrupa os eventos da timeline.
 module.exports = (sequelize, DataTypes) => {
@@ -17,9 +15,9 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         field: 'plot_id',
       },
-      // Cultura plantada: 'soja' ou 'milho'.
+      // Cultura plantada (texto livre: soja, milho, algodão, etc.).
       crop: {
-        type: DataTypes.ENUM(...CROP_VALUES),
+        type: DataTypes.STRING(60),
         allowNull: false,
       },
       // Nome comercial da variedade (ex.: "Ares 7200", "Fielder RR").
