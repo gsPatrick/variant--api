@@ -32,6 +32,7 @@ const RADAR_NUTRIENTS = Object.freeze([
   'enxofre',
   'potassio',
   'saturacao',
+  'ph_cacl2',
 ]);
 
 // Símbolo curto de cada nutriente do radar (usado no gráfico e nos ideais).
@@ -47,6 +48,7 @@ const RADAR_SYMBOLS = Object.freeze({
   enxofre: 'S',
   potassio: 'K',
   saturacao: 'V',
+  ph_cacl2: 'pH',
 });
 
 module.exports = {
