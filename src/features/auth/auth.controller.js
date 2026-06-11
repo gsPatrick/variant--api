@@ -27,4 +27,16 @@ const logout = catchAsync(async (req, res) => {
   return sendSuccess(res, { message: 'Logout efetuado.' });
 });
 
-module.exports = { login, refresh, logout };
+// GET /auth/me — perfil do usuário logado.
+const me = catchAsync(async (req, res) => {
+  const data = await authService.getMe(req.user.id);
+  return sendSuccess(res, { data });
+});
+
+// PATCH /auth/me — atualiza o próprio perfil (dados + senha).
+const updateMe = catchAsync(async (req, res) => {
+  const data = await authService.updateMe(req.user.id, req.body || {});
+  return sendSuccess(res, { data, message: 'Perfil atualizado.' });
+});
+
+module.exports = { login, refresh, logout, me, updateMe };
