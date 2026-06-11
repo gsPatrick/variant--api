@@ -6,6 +6,7 @@ const usersRoutes = require('../features/users/users.routes');
 const farmsRoutes = require('../features/farms/farms.routes');
 const plotsRoutes = require('../features/plots/plots.routes');
 const seasonsRoutes = require('../features/seasons/seasons.routes');
+const settingsRoutes = require('../features/settings/settings.routes');
 
 // Unico agregador das rotas da versao atual da API. Cada feature expoe seu
 // proprio router; nada de endpoints "soltos" aqui, exceto health/ping.
@@ -23,5 +24,6 @@ router.use('/users', usersRoutes);
 router.use('/farms', farmsRoutes);
 router.use('/plots', plotsRoutes);
 router.use('/seasons', seasonsRoutes);
+router.use('/settings', settingsRoutes);
 
 module.exports = router;

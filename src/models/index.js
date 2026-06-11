@@ -12,6 +12,7 @@ const Season = require('./Season')(sequelize, DataTypes);
 const SeasonEvent = require('./SeasonEvent')(sequelize, DataTypes);
 const EventPhoto = require('./EventPhoto')(sequelize, DataTypes);
 const RefreshToken = require('./RefreshToken')(sequelize, DataTypes);
+const Setting = require('./Setting')(sequelize, DataTypes);
 
 // ----- Associacoes (bidirecionais e explicitas) -----
 
@@ -140,6 +141,7 @@ const db = {
   SeasonEvent,
   EventPhoto,
   RefreshToken,
+  Setting,
 };
 
 module.exports = db;
