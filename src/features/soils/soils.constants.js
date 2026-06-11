@@ -33,8 +33,23 @@ const RADAR_NUTRIENTS = Object.freeze([
   'potassio',
 ]);
 
+// Símbolo curto de cada nutriente do radar (usado no gráfico e nos ideais).
+const RADAR_SYMBOLS = Object.freeze({
+  fosforo: 'P',
+  zinco: 'Zn',
+  manganes: 'Mn',
+  ferro: 'Fe',
+  cobre: 'Cu',
+  boro: 'B',
+  magnesio: 'Mg',
+  calcio: 'Ca',
+  enxofre: 'S',
+  potassio: 'K',
+});
+
 module.exports = {
   NUTRIENT_FIELDS,
   NUTRIENT_KEYS: Object.keys(NUTRIENT_FIELDS),
   RADAR_NUTRIENTS,
+  RADAR_SYMBOLS,
 };

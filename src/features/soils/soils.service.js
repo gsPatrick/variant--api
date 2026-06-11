@@ -1,7 +1,7 @@
 const sequelize = require('../../config/database');
 const { SoilAnalysis } = require('../../models');
 const AppError = require('../../utils/app-error');
-const { NUTRIENT_FIELDS, NUTRIENT_KEYS, RADAR_NUTRIENTS } = require('./soils.constants');
+const { NUTRIENT_FIELDS, NUTRIENT_KEYS, RADAR_NUTRIENTS, RADAR_SYMBOLS } = require('./soils.constants');
 const { parseSoilSpreadsheet } = require('./soil-spreadsheet.helper');
 
 // Chave de deduplicacao de uma analise dentro de um talhao: ano + profundidade.
@@ -114,7 +114,8 @@ async function radar(plot, year) {
 
   const teores = RADAR_NUTRIENTS.map((key) => {
     const value = analysis[NUTRIENT_FIELDS[key]];
-    return { nutriente: key, valor: value !== null && value !== undefined ? Number(value) : null };
+    // Devolve o símbolo curto (P, Zn, ...) para casar com os ideais e o eixo do gráfico.
+    return { nutriente: RADAR_SYMBOLS[key] || key, valor: value !== null && value !== undefined ? Number(value) : null };
   });
 
   return { plotId: plot.id, year, teores };
