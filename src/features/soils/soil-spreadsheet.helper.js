@@ -98,9 +98,11 @@ function columnIndex(headers, aliases) {
 
 function parseSoilSpreadsheet(buffer) {
   const binary = isBinarySpreadsheet(buffer);
+  // CSV/texto: decodifica como UTF-8 (evita mojibake de acento, ex.: "Talhão"
+  // virando "TalhÃ£o"). Binário (.xlsx/.xls): lê direto do buffer.
   const workbook = binary
     ? XLSX.read(buffer, { type: 'buffer', cellDates: true })
-    : XLSX.read(buffer, { type: 'buffer', raw: true });
+    : XLSX.read(buffer.toString('utf8').replace(/^\uFEFF/, ''), { type: 'string', raw: true });
 
   const sheetName = workbook.SheetNames[0];
   if (!sheetName) return { rows: [], errors: ['Planilha sem abas.'] };
