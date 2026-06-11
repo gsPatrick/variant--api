@@ -73,8 +73,20 @@ async function importSpreadsheet(plot, fileBuffer, originalName) {
   });
 }
 
+// Profundidades distintas com análise no talhão (ex.: ["20 cm", "40 cm"]).
+async function availableDepths(plot) {
+  const rows = await SoilAnalysis.findAll({
+    where: { plotId: plot.id },
+    attributes: ['depth'],
+  });
+  const depths = [...new Set(rows.map((r) => r.depth).filter(Boolean))];
+  depths.sort((a, b) => (parseInt(a, 10) || 0) - (parseInt(b, 10) || 0));
+  return { plotId: plot.id, depths };
+}
+
 // Grafico de barras: serie historica (ano -> valor) de um nutriente.
-async function evolution(plot, nutrienteKey) {
+// Filtra por profundidade (depth) quando informada, para nao misturar 20 e 40.
+async function evolution(plot, nutrienteKey, depth) {
   const field = NUTRIENT_FIELDS[nutrienteKey];
   if (!field) {
     throw new AppError(
@@ -84,8 +96,10 @@ async function evolution(plot, nutrienteKey) {
     );
   }
 
+  const where = { plotId: plot.id };
+  if (depth) where.depth = depth;
   const analyses = await SoilAnalysis.findAll({
-    where: { plotId: plot.id },
+    where,
     order: [['year', 'ASC']],
   });
 
@@ -94,17 +108,19 @@ async function evolution(plot, nutrienteKey) {
     valor: a[field] !== null && a[field] !== undefined ? Number(a[field]) : null,
   }));
 
-  return { plotId: plot.id, nutriente: nutrienteKey, series };
+  return { plotId: plot.id, nutriente: nutrienteKey, depth: depth || null, series };
 }
 
-// Grafico de radar: todos os teores de um ano especifico.
-async function radar(plot, year) {
+// Grafico de radar: todos os teores de um ano (e profundidade) especifico.
+async function radar(plot, year, depth) {
   if (!Number.isInteger(year)) {
     throw new AppError('Parametro "year" e obrigatorio e deve ser um ano valido.', 400, 'INVALID_YEAR');
   }
 
+  const where = { plotId: plot.id, year };
+  if (depth) where.depth = depth;
   const analysis = await SoilAnalysis.findOne({
-    where: { plotId: plot.id, year },
+    where,
     order: [['analysis_date', 'DESC']],
   });
 
@@ -118,7 +134,7 @@ async function radar(plot, year) {
     return { nutriente: RADAR_SYMBOLS[key] || key, valor: value !== null && value !== undefined ? Number(value) : null };
   });
 
-  return { plotId: plot.id, year, teores };
+  return { plotId: plot.id, year, depth: depth || null, teores };
 }
 
-module.exports = { importSpreadsheet, evolution, radar };
+module.exports = { importSpreadsheet, evolution, radar, availableDepths };

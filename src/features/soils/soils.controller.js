@@ -12,18 +12,26 @@ const importAnalyses = catchAsync(async (req, res) => {
   return sendSuccess(res, { statusCode: 201, data: result, message: 'Importacao concluida.' });
 });
 
-// GET /plots/:plotId/soil-analyses/evolution?nutriente=calcio
+// GET /plots/:plotId/soil-analyses/depths — profundidades com análise.
+const depths = catchAsync(async (req, res) => {
+  const result = await soilsService.availableDepths(req.plot);
+  return sendSuccess(res, { data: result });
+});
+
+// GET /plots/:plotId/soil-analyses/evolution?nutriente=calcio&depth=20 cm
 const evolution = catchAsync(async (req, res) => {
   const nutriente = String(req.query.nutriente || '').trim().toLowerCase();
-  const result = await soilsService.evolution(req.plot, nutriente);
+  const depth = req.query.depth ? String(req.query.depth).trim() : null;
+  const result = await soilsService.evolution(req.plot, nutriente, depth);
   return sendSuccess(res, { data: result });
 });
 
-// GET /plots/:plotId/soil-analyses/radar?year=2024
+// GET /plots/:plotId/soil-analyses/radar?year=2024&depth=20 cm
 const radar = catchAsync(async (req, res) => {
   const parsedYear = Number.parseInt(req.query.year, 10);
-  const result = await soilsService.radar(req.plot, Number.isNaN(parsedYear) ? null : parsedYear);
+  const depth = req.query.depth ? String(req.query.depth).trim() : null;
+  const result = await soilsService.radar(req.plot, Number.isNaN(parsedYear) ? null : parsedYear, depth);
   return sendSuccess(res, { data: result });
 });
 
-module.exports = { importAnalyses, evolution, radar };
+module.exports = { importAnalyses, evolution, radar, depths };

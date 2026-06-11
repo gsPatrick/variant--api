@@ -19,6 +19,7 @@ router.post(
 );
 
 // Leituras — admin ou produtor (filtrado por tenant em resolvePlotAccess).
+router.get('/depths', resolvePlotAccess, controller.depths);
 router.get('/evolution', resolvePlotAccess, controller.evolution);
 router.get('/radar', resolvePlotAccess, controller.radar);
 
