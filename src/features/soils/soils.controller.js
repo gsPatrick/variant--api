@@ -12,6 +12,18 @@ const importAnalyses = catchAsync(async (req, res) => {
   return sendSuccess(res, { statusCode: 201, data: result, message: 'Importacao concluida.' });
 });
 
+// GET /plots/:plotId/soil-analyses — lista as análises do talhão.
+const list = catchAsync(async (req, res) => {
+  const result = await soilsService.listAnalyses(req.plot);
+  return sendSuccess(res, { data: result });
+});
+
+// DELETE /plots/:plotId/soil-analyses/:analysisId — exclui uma análise (admin).
+const remove = catchAsync(async (req, res) => {
+  await soilsService.removeAnalysis(req.plot, req.params.analysisId);
+  return sendSuccess(res, { message: 'Analise removida.' });
+});
+
 // GET /plots/:plotId/soil-analyses/depths — profundidades com análise.
 const depths = catchAsync(async (req, res) => {
   const result = await soilsService.availableDepths(req.plot);
@@ -34,4 +46,4 @@ const radar = catchAsync(async (req, res) => {
   return sendSuccess(res, { data: result });
 });
 
-module.exports = { importAnalyses, evolution, radar, depths };
+module.exports = { importAnalyses, evolution, radar, depths, list, remove };

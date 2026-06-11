@@ -73,6 +73,36 @@ async function importSpreadsheet(plot, fileBuffer, originalName) {
   });
 }
 
+// Lista as análises do talhão (para gestão: ver/excluir linhas).
+async function listAnalyses(plot) {
+  const rows = await SoilAnalysis.findAll({
+    where: { plotId: plot.id },
+    order: [
+      ['year', 'DESC'],
+      ['depth', 'ASC'],
+    ],
+  });
+  return {
+    plotId: plot.id,
+    analyses: rows.map((a) => ({
+      id: a.id,
+      year: a.year,
+      depth: a.depth,
+      analysisDate: a.analysisDate,
+      sourceFile: a.sourceFile,
+    })),
+  };
+}
+
+// Exclui uma análise específica do talhão (admin).
+async function removeAnalysis(plot, analysisId) {
+  const a = await SoilAnalysis.findByPk(analysisId);
+  if (!a || a.plotId !== plot.id) {
+    throw new AppError('Analise nao encontrada.', 404, 'ANALYSIS_NOT_FOUND');
+  }
+  await a.destroy();
+}
+
 // Profundidades distintas com análise no talhão (ex.: ["20 cm", "40 cm"]).
 async function availableDepths(plot) {
   const rows = await SoilAnalysis.findAll({
@@ -137,4 +167,4 @@ async function radar(plot, year, depth) {
   return { plotId: plot.id, year, depth: depth || null, teores };
 }
 
-module.exports = { importSpreadsheet, evolution, radar, availableDepths };
+module.exports = { importSpreadsheet, evolution, radar, availableDepths, listAnalyses, removeAnalysis };

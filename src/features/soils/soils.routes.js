@@ -19,8 +19,11 @@ router.post(
 );
 
 // Leituras — admin ou produtor (filtrado por tenant em resolvePlotAccess).
+router.get('/', resolvePlotAccess, controller.list);
 router.get('/depths', resolvePlotAccess, controller.depths);
 router.get('/evolution', resolvePlotAccess, controller.evolution);
 router.get('/radar', resolvePlotAccess, controller.radar);
+// Exclui uma análise específica — apenas administrador.
+router.delete('/:analysisId', authorize(USER_ROLES.ADMIN), resolvePlotAccess, controller.remove);
 
 module.exports = router;
