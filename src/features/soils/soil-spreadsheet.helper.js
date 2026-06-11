@@ -174,14 +174,20 @@ function parseSoilSpreadsheet(buffer) {
     attrs.analysisDate = idx.date >= 0 ? parseDate(line[idx.date]) : null;
     attrs.labName = idx.lab >= 0 ? textOrNull(line[idx.lab]) : null;
 
+    let hasValue = false;
     Object.entries(nutrientCols).forEach(([attr, col]) => {
       const num = parseNumber(line[col]);
       if (Number.isNaN(num)) {
         errors.push(`linha ${lineNo}: valor invalido na coluna "${headers[col]}".`);
       } else if (num !== null) {
         attrs[attr] = num;
+        hasValue = true;
       }
     });
+
+    // Linha de ano sem nenhum resultado (analise nao feita): ignora para nao
+    // gerar "buracos" vazios nos graficos.
+    if (!hasValue) continue;
 
     rows.push(attrs);
   }

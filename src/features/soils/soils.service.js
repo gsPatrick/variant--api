@@ -24,7 +24,13 @@ async function importSpreadsheet(plot, fileBuffer, originalName) {
 
   // Planilha multi-talhao (laudo): filtra as linhas do talhao selecionado pelo
   // nome. Sem coluna de talhao, importa todas as linhas para o talhao atual.
-  const norm = (s) => String(s || '').trim().toLowerCase();
+  // Casa o nome do talhao ignorando maiusculas, espaços nas pontas e acentos.
+  const norm = (s) =>
+    String(s || '')
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .trim()
+      .toLowerCase();
   const hasTalhao = rows.some((r) => r.talhao);
   const scoped = hasTalhao ? rows.filter((r) => norm(r.talhao) === norm(plot.name)) : rows;
 
