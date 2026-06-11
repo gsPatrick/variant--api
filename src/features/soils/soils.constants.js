@@ -19,7 +19,7 @@ const NUTRIENT_FIELDS = Object.freeze({
   boro: 'boron',
 });
 
-// Conjunto e ordem dos nutrientes exibidos no grafico de radar (teores do ano).
+// Conjunto e ordem dos nutrientes/indices exibidos no grafico de radar.
 const RADAR_NUTRIENTS = Object.freeze([
   'fosforo',
   'zinco',
@@ -31,6 +31,7 @@ const RADAR_NUTRIENTS = Object.freeze([
   'calcio',
   'enxofre',
   'potassio',
+  'saturacao',
 ]);
 
 // Símbolo curto de cada nutriente do radar (usado no gráfico e nos ideais).
@@ -45,6 +46,7 @@ const RADAR_SYMBOLS = Object.freeze({
   calcio: 'Ca',
   enxofre: 'S',
   potassio: 'K',
+  saturacao: 'V',
 });
 
 module.exports = {
