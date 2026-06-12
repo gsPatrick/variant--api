@@ -5,7 +5,6 @@ const v = require('../../utils/validation');
 const {
   USER_ROLES,
   SEASON_EVENT_TYPES,
-  SEASON_EVENT_TYPE_VALUES,
 } = require('../../config/constants');
 const { publicBaseUrl } = require('../../config/uploads');
 
@@ -60,15 +59,8 @@ function validateEventPayload(payload) {
     errors.push({ field: 'eventDate', message: 'eventDate (YYYY-MM-DD) e obrigatorio e valido.' });
   }
 
-  const eventType = v.isNonEmptyString(payload.eventType)
-    ? payload.eventType.trim()
-    : SEASON_EVENT_TYPES.OTHER;
-  if (!SEASON_EVENT_TYPE_VALUES.includes(eventType)) {
-    errors.push({
-      field: 'eventType',
-      message: `eventType invalido. Use: ${SEASON_EVENT_TYPE_VALUES.join(', ')}.`,
-    });
-  }
+  // Tipo livre (visita, correção, manejo, etc.); cai em "outro" se vazio.
+  const eventType = v.isNonEmptyString(payload.eventType) ? payload.eventType.trim() : SEASON_EVENT_TYPES.OTHER;
 
   return { errors, eventType };
 }
@@ -138,11 +130,8 @@ async function updateEvent(season, eventId, payload, file) {
     errors.push({ field: 'eventDate', message: 'eventDate (YYYY-MM-DD) invalido.' });
   }
   let eventType;
-  if (v.isPresent(payload.eventType)) {
+  if (v.isPresent(payload.eventType) && v.isNonEmptyString(payload.eventType)) {
     eventType = String(payload.eventType).trim();
-    if (!SEASON_EVENT_TYPE_VALUES.includes(eventType)) {
-      errors.push({ field: 'eventType', message: `eventType invalido. Use: ${SEASON_EVENT_TYPE_VALUES.join(', ')}.` });
-    }
   }
   if (errors.length > 0) throw v.validationError(errors);
 

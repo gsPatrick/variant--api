@@ -1,4 +1,4 @@
-const { SEASON_EVENT_TYPE_VALUES, SEASON_EVENT_TYPES } = require('../config/constants');
+const { SEASON_EVENT_TYPES } = require('../config/constants');
 
 // Evento da linha do tempo de uma safra (plantio, adubacao, defensivos,
 // colheita, etc.). Exibido cronologicamente na timeline; ao clicar, abre
@@ -18,9 +18,9 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         field: 'season_id',
       },
-      // Categoria do evento (define icone/cor na timeline).
+      // Categoria do evento (define icone/cor na timeline). Texto livre.
       eventType: {
-        type: DataTypes.ENUM(...SEASON_EVENT_TYPE_VALUES),
+        type: DataTypes.STRING(40),
         allowNull: false,
         defaultValue: SEASON_EVENT_TYPES.OTHER,
         field: 'event_type',

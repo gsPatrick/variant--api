@@ -20,6 +20,9 @@ const SEASON_EVENT_TYPES = Object.freeze({
   PESTICIDE_APPLICATION: 'aplicacao_defensivos',
   IRRIGATION: 'irrigacao',
   HARVEST: 'colheita',
+  VISIT: 'visita',
+  CORRECTION: 'correcao',
+  MANAGEMENT: 'manejo',
   OTHER: 'outro',
 });
 
