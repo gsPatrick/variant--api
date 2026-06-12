@@ -80,6 +80,33 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: true,
         field: 'aluminum_saturation',
       },
+      // Acidez potencial (H+Al), cmolc/dm³.
+      acidezPotencial: {
+        type: DataTypes.DECIMAL(10, 2),
+        allowNull: true,
+        field: 'h_al',
+      },
+      // Aluminio trocavel (Al), cmolc/dm³.
+      aluminum: {
+        type: DataTypes.DECIMAL(10, 2),
+        allowNull: true,
+      },
+      // CTC a pH 7 (T), cmolc/dm³ (cec = CTC efetiva).
+      cecTotal: {
+        type: DataTypes.DECIMAL(10, 2),
+        allowNull: true,
+        field: 'cec_total',
+      },
+      // Carbono organico total (COT), %.
+      totalCarbon: {
+        type: DataTypes.DECIMAL(10, 2),
+        allowNull: true,
+        field: 'total_carbon',
+      },
+      // Textura (%).
+      sand: { type: DataTypes.DECIMAL(10, 2), allowNull: true },
+      silt: { type: DataTypes.DECIMAL(10, 2), allowNull: true },
+      clay: { type: DataTypes.DECIMAL(10, 2), allowNull: true },
 
       // ----- Macronutrientes -----
       phosphorus: { // P
