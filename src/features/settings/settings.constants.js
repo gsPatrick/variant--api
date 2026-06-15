@@ -22,4 +22,20 @@ const DEFAULT_RADAR_IDEALS = {
   pH: 5.5,
 };
 
-module.exports = { RADAR_IDEALS_KEY, RADAR_NUTRIENT_KEYS, DEFAULT_RADAR_IDEALS };
+// Links das redes sociais exibidos no rodapé da sidebar. O agrônomo edita na
+// tela de Parâmetros; link vazio = o ícone correspondente some.
+const SOCIAL_LINKS_KEY = 'social_links';
+const SOCIAL_LINK_KEYS = ['instagram', 'whatsapp'];
+const DEFAULT_SOCIAL_LINKS = {
+  instagram: 'https://instagram.com/variantmapas',
+  whatsapp: 'https://wa.me/5566999999999',
+};
+
+module.exports = {
+  RADAR_IDEALS_KEY,
+  RADAR_NUTRIENT_KEYS,
+  DEFAULT_RADAR_IDEALS,
+  SOCIAL_LINKS_KEY,
+  SOCIAL_LINK_KEYS,
+  DEFAULT_SOCIAL_LINKS,
+};

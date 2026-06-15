@@ -14,4 +14,16 @@ const updateRadarIdeals = catchAsync(async (req, res) => {
   return sendSuccess(res, { data: result, message: 'Valores ideais atualizados.' });
 });
 
-module.exports = { getRadarIdeals, updateRadarIdeals };
+// GET /settings/social-links — admin e produtor (a sidebar exibe os ícones).
+const getSocialLinks = catchAsync(async (req, res) => {
+  const result = await settingsService.getSocialLinks();
+  return sendSuccess(res, { data: result });
+});
+
+// PUT /settings/social-links — apenas administrador.
+const updateSocialLinks = catchAsync(async (req, res) => {
+  const result = await settingsService.saveSocialLinks(req.body?.links || req.body || {});
+  return sendSuccess(res, { data: result, message: 'Links das redes sociais atualizados.' });
+});
+
+module.exports = { getRadarIdeals, updateRadarIdeals, getSocialLinks, updateSocialLinks };

@@ -13,4 +13,8 @@ router.get('/radar-ideals', controller.getRadarIdeals);
 // Escrita — apenas administrador (define a referência agronômica).
 router.put('/radar-ideals', authorize(USER_ROLES.ADMIN), controller.updateRadarIdeals);
 
+// Links das redes sociais da sidebar. Leitura para todos; escrita só admin.
+router.get('/social-links', controller.getSocialLinks);
+router.put('/social-links', authorize(USER_ROLES.ADMIN), controller.updateSocialLinks);
+
 module.exports = router;
